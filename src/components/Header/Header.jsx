@@ -48,7 +48,6 @@ export default function Header() {
       <div className="brand">
         <div className="tag">GATE CS Complete Prep</div>
         <h1>GATE 2027 — CS Prep Console</h1>
-        <div className="sub">Candidate</div>
       </div>
       <div className="header-right">
         <div className="io-btns">
