@@ -3,7 +3,7 @@ import AlertPanel from '../../components/AlertPanel/AlertPanel.jsx';
 import StatCard from '../../components/StatCard/StatCard.jsx';
 import ProgressBar from '../../components/ProgressBar/ProgressBar.jsx';
 import { SYLLABUS } from '../../constants/syllabus.js';
-import { subjectStats, computeStreak, last7NetHours, getRevCount } from '../../utils/stats.js';
+import { subjectStats, computeStreak, last7NetHours, getRevCount, overallLectureStats, lectureStats } from '../../utils/stats.js';
 
 export default function DashboardView() {
   const { state } = useApp();
@@ -32,6 +32,7 @@ export default function DashboardView() {
   const streak = computeStreak(state.logs);
   const net7 = last7NetHours(state.util);
   const openMistakes = state.mistakes.filter(m => !m.resolved).length;
+  const lecOverall = overallLectureStats(state.lectures);
 
   return (
     <>
@@ -85,6 +86,18 @@ export default function DashboardView() {
             ? 'none open — nice, keep logging as you go'
             : 'still repeating · review before your next mock'}
         />
+
+        {lecOverall.total > 0 && (
+          <StatCard
+            label="Lectures completed"
+            value={`${lecOverall.completed}/${lecOverall.total}`}
+            detail={`${lecOverall.pct}% across ${lecOverall.subjects} subject${lecOverall.subjects !== 1 ? 's' : ''}`}
+          >
+            <div style={{ marginTop: '10px' }}>
+              <ProgressBar pct={lecOverall.pct} />
+            </div>
+          </StatCard>
+        )}
       </div>
 
       <div className="sheet">
@@ -96,12 +109,14 @@ export default function DashboardView() {
           {SYLLABUS.map(subj => {
             const st = subjectStats(subj, state.topics);
             const revCount = getRevCount(state.revisions, subj.id);
+            const lecSt = lectureStats(state.lectures, subj.id);
             return (
               <div key={subj.id} className="subject-row">
                 <div className="name">
                   {subj.name}
                   {st.weak > 0 && <span style={{ color: 'var(--amber)' }}> ★</span>}
                   {revCount > 0 && <span style={{ color: 'var(--purple)' }}> 🔁{revCount}</span>}
+                  {lecSt.total > 0 && <span style={{ color: 'var(--cyan)' }}> 🎥{lecSt.completed}/{lecSt.total}</span>}
                 </div>
                 <div className="bar">
                   <ProgressBar pct={st.pct} />

@@ -80,3 +80,36 @@ export function utilClass(util, iso) {
   if (net > -6) return "u-r3";
   return "u-r4";
 }
+
+// Lecture progress stats for a single subject
+export function lectureStats(lectures, subjId) {
+  const data = lectures[subjId];
+  if (!data || !data.total) return { total: 0, completed: 0, pct: 0 };
+  const completed = Object.keys(data.completed).filter(
+    k => parseInt(k) <= data.total
+  ).length;
+  return {
+    total: data.total,
+    completed,
+    pct: data.total ? Math.round(completed / data.total * 100) : 0
+  };
+}
+
+// Overall lecture progress across all subjects
+export function overallLectureStats(lectures) {
+  let totalLecs = 0, completedLecs = 0, subjectsWithLectures = 0;
+  for (const subjId of Object.keys(lectures)) {
+    const st = lectureStats(lectures, subjId);
+    if (st.total > 0) {
+      totalLecs += st.total;
+      completedLecs += st.completed;
+      subjectsWithLectures++;
+    }
+  }
+  return {
+    total: totalLecs,
+    completed: completedLecs,
+    pct: totalLecs ? Math.round(completedLecs / totalLecs * 100) : 0,
+    subjects: subjectsWithLectures
+  };
+}

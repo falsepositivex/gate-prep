@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import TopicRow from './TopicRow.jsx';
+import LectureTracker from './LectureTracker.jsx';
 import ProgressBar from '../ProgressBar/ProgressBar.jsx';
-import { subjectStats, getRevCount } from '../../utils/stats.js';
+import { subjectStats, getRevCount, lectureStats } from '../../utils/stats.js';
 
 export default function SubjectAccordion({ subj, open, topics }) {
   const { state, dispatch } = useApp();
@@ -11,6 +12,7 @@ export default function SubjectAccordion({ subj, open, topics }) {
   const stats = subjectStats(subj, state.topics);
   const revCount = getRevCount(state.revisions, subj.id);
   const hasNote = (state.notes[subj.id] || '').trim().length > 0;
+  const lecStats = lectureStats(state.lectures, subj.id);
 
   function handleNoteChange(e) {
     const text = e.target.value;
@@ -34,6 +36,7 @@ export default function SubjectAccordion({ subj, open, topics }) {
           {stats.pct}% · {stats.revised}/{stats.topicCount} revised
           {stats.weak ? ` · ★${stats.weak}` : ''}
           {revCount > 0 ? ` · 🔁×${revCount}` : ''}
+          {lecStats.total > 0 ? ` · 🎥${lecStats.completed}/${lecStats.total}` : ''}
           {hasNote ? ' · 📝' : ''}
         </span>
       </summary>
@@ -56,6 +59,9 @@ export default function SubjectAccordion({ subj, open, topics }) {
             >+1 Revision</button>
           </div>
         </div>
+
+        {/* Lecture progress tracker */}
+        <LectureTracker subjId={subj.id} />
 
         {/* Topic rows */}
         {topics.map(({ t, idx }) => (

@@ -8,7 +8,8 @@ const INITIAL_STATE = {
   util: {},
   notes: {},
   mistakes: [],
-  revisions: {}
+  revisions: {},
+  lectures: {}
 };
 
 export function loadState() {

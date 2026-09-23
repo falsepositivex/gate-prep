@@ -145,6 +145,78 @@ export function appReducer(state, action) {
       break;
     }
 
+    case 'SET_LECTURE_COUNT': {
+      const { subjId, total } = action.payload;
+      const existing = state.lectures[subjId] || { total: 0, completed: {} };
+      newState = {
+        ...state,
+        lectures: {
+          ...state.lectures,
+          [subjId]: { ...existing, total: Math.max(0, total) }
+        }
+      };
+      break;
+    }
+
+    case 'TOGGLE_LECTURE': {
+      const { subjId, lecNum } = action.payload;
+      const existing = state.lectures[subjId] || { total: 0, completed: {} };
+      const nextCompleted = { ...existing.completed };
+      if (nextCompleted[lecNum]) {
+        delete nextCompleted[lecNum];
+      } else {
+        // Record IST timestamp when marking complete
+        nextCompleted[lecNum] = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      }
+      newState = {
+        ...state,
+        lectures: {
+          ...state.lectures,
+          [subjId]: { ...existing, completed: nextCompleted }
+        }
+      };
+      break;
+    }
+
+    case 'COMPLETE_ALL_LECTURES': {
+      const { subjId } = action.payload;
+      const existing = state.lectures[subjId] || { total: 0, completed: {} };
+      const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      const nextCompleted = { ...existing.completed };
+      for (let i = 1; i <= existing.total; i++) {
+        if (!nextCompleted[i]) nextCompleted[i] = now;
+      }
+      newState = {
+        ...state,
+        lectures: {
+          ...state.lectures,
+          [subjId]: { ...existing, completed: nextCompleted }
+        }
+      };
+      break;
+    }
+
+    case 'RESET_ALL_LECTURES': {
+      const { subjId } = action.payload;
+      const existing = state.lectures[subjId] || { total: 0, completed: {} };
+      newState = {
+        ...state,
+        lectures: {
+          ...state.lectures,
+          [subjId]: { ...existing, completed: {} }
+        }
+      };
+      break;
+    }
+
+    case 'CLEAR_LECTURES': {
+      const { subjId } = action.payload;
+      const nextLectures = { ...state.lectures };
+      delete nextLectures[subjId];
+      newState = { ...state, lectures: nextLectures };
+      break;
+    }
+
     case 'IMPORT_STATE': {
       newState = action.payload.newState;
       break;

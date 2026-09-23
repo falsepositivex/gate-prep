@@ -30,7 +30,7 @@ export default function Header() {
       try {
         const parsed = JSON.parse(reader.result);
         const newState = Object.assign(
-          { topics: {}, tests: [], logs: [], util: {}, notes: {}, mistakes: [], revisions: {} },
+          { topics: {}, tests: [], logs: [], util: {}, notes: {}, mistakes: [], revisions: {}, lectures: {} },
           parsed
         );
         dispatch({ type: 'IMPORT_STATE', payload: { newState } });
