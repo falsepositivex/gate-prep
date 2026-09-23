@@ -553,8 +553,8 @@ footer.tip a { color: var(--cyan); }
   .lecture-summary-label strong { font-size: 13px; }
   .lecture-edit { gap: 6px; padding: 8px 10px; }
   .lecture-edit-label { font-size: 11.5px; flex-basis: 100%; }
-  .lecture-row { padding: 6px 10px; gap: 6px; }
-  .lecture-row .lecture-ts { display: none; }
+  .lecture-row { padding: 6px 10px; gap: 6px; flex-wrap: wrap; }
+  .lecture-row .lecture-ts { display: block; flex-basis: 100%; margin-left: 24px; margin-top: -4px; }
   .lecture-checklist { max-height: 260px; }
   .lecture-setup { padding: 8px 10px; gap: 8px; }
   .lecture-setup-text { font-size: 12px; }
@@ -574,7 +574,7 @@ footer.tip a { color: var(--cyan); }
   .lecture-save-btn, .lecture-cancel-btn { font-size: 11.5px !important; padding: 5px 8px !important; }
   .lecture-label { font-size: 12.5px; }
   .lecture-check { font-size: 14px; width: 18px; }
-  .lecture-row .lecture-ts { display: none; }
+  .lecture-row .lecture-ts { display: block; font-size: 10.5px; margin-left: 22px; margin-top: -2px; }
   .lecture-progress-bar { height: 5px; }
   .lecture-setup-text { font-size: 11px; }
   .lecture-setup-btn { font-size: 11px !important; padding: 4px 8px !important; }
