@@ -12,11 +12,7 @@ const FILTER_OPTIONS = [
 
 const SOURCES = ['Mock Test', 'PYQ', 'DPP / Practice', 'Lecture', 'Other'];
 
-function escapeHtml(str) {
-  const d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
-}
+// Removed escapeHtml as we rely on white-space: pre-wrap CSS
 
 export default function MistakesView() {
   const { state, dispatch } = useApp();
@@ -130,21 +126,19 @@ export default function MistakesView() {
                 <span
                   className="mc-del"
                   data-id={m.id}
-                  onClick={() => dispatch({ type: 'DELETE_MISTAKE', payload: { id: m.id } })}
+                  onClick={() => {
+                    if (window.confirm('Delete this mistake?')) {
+                      dispatch({ type: 'DELETE_MISTAKE', payload: { id: m.id } });
+                    }
+                  }}
                 >✕</span>
               </div>
               <div className="mc-label">What went wrong</div>
-              <div
-                className="mc-text"
-                dangerouslySetInnerHTML={{ __html: escapeHtml(m.mistake) }}
-              />
+              <div className="mc-text">{m.mistake}</div>
               {m.fix && (
                 <>
                   <div className="mc-label">Correct approach / why</div>
-                  <div
-                    className="mc-text"
-                    dangerouslySetInnerHTML={{ __html: escapeHtml(m.fix) }}
-                  />
+                  <div className="mc-text">{m.fix}</div>
                 </>
               )}
             </div>

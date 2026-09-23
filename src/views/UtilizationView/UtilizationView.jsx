@@ -1,26 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import HeatmapGrid from '../../components/HeatmapGrid/HeatmapGrid.jsx';
-import Modal from '../../components/Modal/Modal.jsx';
+import { istTodayIso } from '../../utils/ist.js';
 
 export default function UtilizationView() {
   const { state, dispatch } = useApp();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [activeDate, setActiveDate] = useState(null);
+  const [activeDate, setActiveDate] = useState(istTodayIso());
   const [studied, setStudied] = useState('');
   const [wasted, setWasted] = useState('');
 
-  function openModal(iso) {
-    setActiveDate(iso);
-    const u = state.util[iso] || {};
-    setStudied(u.studied !== undefined ? String(u.studied) : '');
-    setWasted(u.wasted !== undefined ? String(u.wasted) : '');
-    setModalOpen(true);
-  }
+  useEffect(() => {
+    if (activeDate) {
+      const u = state.util[activeDate] || {};
+      setStudied(u.studied !== undefined ? String(u.studied) : '');
+      setWasted(u.wasted !== undefined ? String(u.wasted) : '');
+    } else {
+      setStudied('');
+      setWasted('');
+    }
+  }, [activeDate, state.util]);
 
-  function closeModal() {
-    setModalOpen(false);
-    setActiveDate(null);
+  function selectDate(iso) {
+    setActiveDate(iso);
   }
 
   function handleSave() {
@@ -33,13 +34,13 @@ export default function UtilizationView() {
         wasted: parseFloat(wasted) || 0
       }
     });
-    closeModal();
   }
 
   function handleClear() {
     if (!activeDate) return;
-    dispatch({ type: 'CLEAR_UTIL_DAY', payload: { iso: activeDate } });
-    closeModal();
+    if (window.confirm(`Clear utilization data for ${activeDate}?`)) {
+      dispatch({ type: 'CLEAR_UTIL_DAY', payload: { iso: activeDate } });
+    }
   }
 
   // Summary stats
@@ -58,19 +59,50 @@ export default function UtilizationView() {
     <div className="sheet">
       <h2 className="section-title">Day Utilization Calendar</h2>
       <p className="section-note">
-        Click any day to log hours studied vs. hours wasted. Greener = more productive net hours, redder = more time lost. Empty = no data yet.
+        Log hours studied vs. hours wasted. Greener = more productive net hours, redder = more time lost. Empty = no data yet.
       </p>
 
-      {/* Legend */}
-      <div className="util-legend">
-        <span>Less productive</span>
-        <span className="sw u-r4" /><span className="sw u-r3" /><span className="sw u-r2" /><span className="sw u-r1" />
-        <span className="sw" style={{ background: 'var(--bg-3)' }} />
-        <span className="sw u-g1" /><span className="sw u-g2" /><span className="sw u-g3" /><span className="sw u-g4" />
-        <span>More productive</span>
-      </div>
+      <HeatmapGrid util={state.util} onCellClick={selectDate} activeDate={activeDate} />
 
-      <HeatmapGrid util={state.util} onCellClick={openModal} />
+      <section className="util-inline-form">
+        <h3 className="form-title">Log Utilization</h3>
+        <div className="util-form-grid">
+          <label>
+            Date
+            <input
+              type="date"
+              value={activeDate}
+              onChange={e => setActiveDate(e.target.value)}
+            />
+          </label>
+          <label>
+            Hours studied
+            <input
+              type="number"
+              step="0.5"
+              min="0"
+              placeholder="e.g. 4"
+              value={studied}
+              onChange={e => setStudied(e.target.value)}
+            />
+          </label>
+          <label>
+            Hours wasted
+            <input
+              type="number"
+              step="0.5"
+              min="0"
+              placeholder="e.g. 1.5"
+              value={wasted}
+              onChange={e => setWasted(e.target.value)}
+            />
+          </label>
+          <div className="form-actions">
+            <button className="btn ghost" onClick={handleClear}>Clear Day</button>
+            <button className="btn" onClick={handleSave}>Save</button>
+          </div>
+        </div>
+      </section>
 
       {/* Summary cards */}
       <div className="util-summary" id="utilSummary">
@@ -88,44 +120,11 @@ export default function UtilizationView() {
         </div>
         <div className="card">
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', color: 'var(--cyan)', textTransform: 'uppercase' }}>Best day</div>
-          <div style={{ fontFamily: 'var(--font-head)', fontSize: '19px', fontWeight: 700, marginTop: '4px' }}>
+          <div style={{ fontFamily: 'var(--font-head)', fontSize: '19px', fontWeight: 700, marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {bestDay ? `${bestDay.iso} (${bestDay.net >= 0 ? '+' : ''}${bestDay.net.toFixed(1)}h)` : '—'}
           </div>
         </div>
       </div>
-
-      {/* Utilization Modal */}
-      <Modal open={modalOpen} onClose={closeModal}>
-        <h3>Log this day</h3>
-        <div className="mdate">{activeDate}</div>
-        <label htmlFor="modalStudied">Hours studied</label>
-        <input
-          type="number"
-          step="0.5"
-          min="0"
-          id="modalStudied"
-          placeholder="e.g. 4"
-          value={studied}
-          onChange={e => setStudied(e.target.value)}
-        />
-        <label htmlFor="modalWasted">Hours wasted</label>
-        <input
-          type="number"
-          step="0.5"
-          min="0"
-          id="modalWasted"
-          placeholder="e.g. 1.5"
-          value={wasted}
-          onChange={e => setWasted(e.target.value)}
-        />
-        <div className="modal-actions">
-          <button className="btn ghost" id="modalClear" onClick={handleClear}>Clear day</button>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button className="btn ghost" id="modalCancel" onClick={closeModal}>Cancel</button>
-            <button className="btn" id="modalSave" onClick={handleSave}>Save</button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }

@@ -75,14 +75,18 @@ export default function MockTestsView() {
               <tr key={t.id}>
                 <td>{t.date}</td>
                 <td>{t.name}</td>
-                <td>{t.type}</td>
+                <td>{t.testType}</td>
                 <td>{t.score}/{t.max}</td>
                 <td>{Math.round((t.score / t.max) * 100)}%</td>
                 <td>
                   <span
                     className="del-x"
                     data-id={t.id}
-                    onClick={() => dispatch({ type: 'DELETE_TEST', payload: { id: t.id } })}
+                    onClick={() => {
+                      if (window.confirm('Delete this mock test?')) {
+                        dispatch({ type: 'DELETE_TEST', payload: { id: t.id } });
+                      }
+                    }}
                   >✕</span>
                 </td>
               </tr>

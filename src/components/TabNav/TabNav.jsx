@@ -3,7 +3,7 @@ const TABS = [
   { id: 'syllabus', label: 'Syllabus Tracker' },
   { id: 'tests',    label: 'Mock Tests' },
   { id: 'log',      label: 'Study Log' },
-  { id: 'util',     label: 'Utilization' },
+  { id: 'util',     label: 'Day Log' },
   { id: 'mistakes', label: 'Mistakes' },
 ];
 

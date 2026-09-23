@@ -51,8 +51,7 @@ export default function StudyLogView() {
         </label>
         <label>
           Note
-          <input
-            type="text"
+          <textarea
             id="lNote"
             placeholder="what you covered"
             value={note}
@@ -76,7 +75,11 @@ export default function StudyLogView() {
               <span
                 className="del-x"
                 data-id={l.id}
-                onClick={() => dispatch({ type: 'DELETE_LOG', payload: { id: l.id } })}
+                onClick={() => {
+                  if (window.confirm('Delete this study log entry?')) {
+                    dispatch({ type: 'DELETE_LOG', payload: { id: l.id } });
+                  }
+                }}
               >✕</span>
             </div>
           );
