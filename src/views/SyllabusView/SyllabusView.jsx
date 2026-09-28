@@ -18,7 +18,7 @@ export default function SyllabusView() {
   const [filterMode, setFilterMode] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const active = searchTerm || filterMode !== 'all';
+  const active = searchTerm.trim() || filterMode !== 'all';
 
   return (
     <div className="sheet">
@@ -33,7 +33,7 @@ export default function SyllabusView() {
           id="topicSearch"
           placeholder="Search a topic or subject…"
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value.trim().toLowerCase())}
+          onChange={e => setSearchTerm(e.target.value)}
         />
         <ChipFilter options={FILTER_OPTIONS} active={filterMode} onChange={setFilterMode} />
       </div>
@@ -48,9 +48,10 @@ export default function SyllabusView() {
               const status = topicStatus(ts);
               if (filterMode === 'weak' && !ts.weak) return false;
               if (filterMode !== 'all' && filterMode !== 'weak' && status !== filterMode) return false;
-              if (searchTerm) {
+              const normalizedSearch = searchTerm.trim().toLowerCase();
+              if (normalizedSearch) {
                 const hay = (subj.name + ' ' + t).toLowerCase();
-                if (!hay.includes(searchTerm)) return false;
+                if (!hay.includes(normalizedSearch)) return false;
               }
               return true;
             });
