@@ -85,9 +85,11 @@ export function utilClass(util, iso) {
 export function lectureStats(lectures, subjId) {
   const data = lectures[subjId];
   if (!data || !data.total) return { total: 0, completed: 0, pct: 0 };
-  const completed = Object.keys(data.completed).filter(
-    k => parseInt(k) <= data.total
-  ).length;
+  // Count only keys that fall within the valid internal range [0, total - 1]
+  const completed = Object.keys(data.completed).filter(k => {
+    const n = Number(k);
+    return n >= 0 && n < data.total;
+  }).length;
   return {
     total: data.total,
     completed,

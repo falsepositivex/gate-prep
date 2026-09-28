@@ -146,13 +146,32 @@ export function appReducer(state, action) {
     }
 
     case 'SET_LECTURE_COUNT': {
-      const { subjId, total } = action.payload;
-      const existing = state.lectures[subjId] || { total: 0, completed: {} };
+      const { subjId, total, startFrom } = action.payload;
+      const existing = state.lectures[subjId] || { total: 0, completed: {}, startFrom: 1 };
+      
       newState = {
         ...state,
         lectures: {
           ...state.lectures,
-          [subjId]: { ...existing, total: Math.max(0, total) }
+          [subjId]: { 
+            ...existing, 
+            total: Math.max(0, total),
+            startFrom: startFrom !== undefined ? startFrom : existing.startFrom
+          }
+        }
+      };
+      break;
+    }
+
+    case 'SET_LECTURE_START': {
+      const { subjId, startFrom } = action.payload;
+      const existing = state.lectures[subjId] || { total: 0, completed: {}, startFrom: 1 };
+
+      newState = {
+        ...state,
+        lectures: {
+          ...state.lectures,
+          [subjId]: { ...existing, startFrom }
         }
       };
       break;
@@ -180,10 +199,10 @@ export function appReducer(state, action) {
 
     case 'COMPLETE_ALL_LECTURES': {
       const { subjId } = action.payload;
-      const existing = state.lectures[subjId] || { total: 0, completed: {} };
+      const existing = state.lectures[subjId] || { total: 0, completed: {}, startFrom: 1 };
       const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
       const nextCompleted = { ...existing.completed };
-      for (let i = 1; i <= existing.total; i++) {
+      for (let i = 0; i < existing.total; i++) {
         if (!nextCompleted[i]) nextCompleted[i] = now;
       }
       newState = {
