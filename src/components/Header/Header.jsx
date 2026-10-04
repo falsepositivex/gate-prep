@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
-import { istTodayIso } from '../../utils/ist.js';
+import { Download, Upload } from 'lucide-react';
 
 export default function Header() {
   const { state, dispatch } = useApp();
@@ -44,23 +44,35 @@ export default function Header() {
   }
 
   return (
-    <header className="top">
-      <div className="brand">
-        <div className="tag">GATE CS Complete Prep</div>
-        <h1>GATE 2027 — CS Prep Console</h1>
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border-subtle relative z-10">
+      <div className="flex flex-col gap-1">
+        <div className="font-mono text-xs tracking-[0.15em] text-cyan uppercase font-semibold">GATE CS Complete Prep</div>
+        <h1 className="font-head font-bold text-3xl md:text-4xl leading-tight text-white tracking-tight">
+          GATE 2027 <span className="text-white/30 font-normal">—</span> CS Prep Console
+        </h1>
       </div>
-      <div className="header-right">
-        <div className="io-btns">
-          <button id="exportBtn" onClick={handleExport}>Export</button>
-          <button id="importBtn" onClick={handleImportClick}>Import</button>
-          <input
-            ref={importRef}
-            type="file"
-            accept="application/json"
-            style={{ display: 'none' }}
-            onChange={handleImportFile}
-          />
-        </div>
+      <div className="flex items-center gap-2 self-start sm:self-auto">
+        <button 
+          onClick={handleExport}
+          className="flex items-center gap-2 px-3 py-2 bg-surface-2 hover:bg-surface-3 border border-border-strong rounded-md text-text-muted hover:text-white transition-all duration-200 text-xs font-mono uppercase tracking-wider group focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber/50"
+        >
+          <Download className="w-4 h-4 group-hover:text-amber transition-colors" />
+          <span>Export</span>
+        </button>
+        <button 
+          onClick={handleImportClick}
+          className="flex items-center gap-2 px-3 py-2 bg-surface-2 hover:bg-surface-3 border border-border-strong rounded-md text-text-muted hover:text-white transition-all duration-200 text-xs font-mono uppercase tracking-wider group focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan/50"
+        >
+          <Upload className="w-4 h-4 group-hover:text-cyan transition-colors" />
+          <span>Import</span>
+        </button>
+        <input
+          ref={importRef}
+          type="file"
+          accept="application/json"
+          className="hidden"
+          onChange={handleImportFile}
+        />
       </div>
     </header>
   );

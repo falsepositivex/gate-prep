@@ -3,8 +3,10 @@ import { useApp } from '../../context/AppContext.jsx';
 import HeatmapGrid from '../../components/HeatmapGrid/HeatmapGrid.jsx';
 import { SYLLABUS } from '../../constants/syllabus.js';
 import { istTodayIso } from '../../utils/ist.js';
+import { Calendar as CalendarIcon, Clock, Save, Trash2, Plus, BookOpen, Activity, BarChart2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../../lib/utils';
 
-// ─── Day Overview Sub-View ───────────────────────────────────────────────────
 function DayOverview() {
   const { state, dispatch } = useApp();
   const [activeDate, setActiveDate] = useState(istTodayIso());
@@ -53,81 +55,98 @@ function DayOverview() {
   });
 
   return (
-    <>
-      <p className="section-note">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+    >
+      <p className="text-sm text-text-muted mb-6 leading-relaxed max-w-3xl">
         Log hours studied vs. hours wasted per day. Greener = more productive net hours, redder = more time lost.
       </p>
 
       <HeatmapGrid util={state.util} onCellClick={setActiveDate} activeDate={activeDate} />
 
-      <section className="util-inline-form">
-        <h3 className="form-title">
-          <span className="form-title-icon">📅</span>
-          Log for <span className="form-title-date">{activeDate}</span>
+      <section className="glass-card p-5 sm:p-6 mb-8 border-accent/20 bg-accent/5">
+        <h3 className="font-head font-bold text-lg text-white mb-4 flex items-center gap-2">
+          <CalendarIcon className="w-5 h-5 text-accent" />
+          Log for <span className="text-accent">{activeDate}</span>
         </h3>
-        <div className="util-form-grid">
-          <label>
-            Date
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-end">
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Date</label>
             <input
               type="date"
+              className="w-full bg-surface-3 border border-border-strong rounded-md px-3 py-2 text-sm text-text-main focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
               value={activeDate}
               onChange={e => setActiveDate(e.target.value)}
             />
-          </label>
-          <label>
-            Hours studied
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Hours studied</label>
             <input
               type="number"
               step="0.5"
               min="0"
               placeholder="e.g. 4"
+              className="w-full bg-surface-3 border border-border-strong rounded-md px-3 py-2 text-sm text-text-main focus:outline-none focus:border-green focus:ring-1 focus:ring-green transition-colors"
               value={studied}
               onChange={e => setStudied(e.target.value)}
             />
-          </label>
-          <label>
-            Hours wasted
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Hours wasted</label>
             <input
               type="number"
               step="0.5"
               min="0"
               placeholder="e.g. 1.5"
+              className="w-full bg-surface-3 border border-border-strong rounded-md px-3 py-2 text-sm text-text-main focus:outline-none focus:border-red focus:ring-1 focus:ring-red transition-colors"
               value={wasted}
               onChange={e => setWasted(e.target.value)}
             />
-          </label>
-          <div className="form-actions">
-            <button className="btn ghost" onClick={handleClear}>Clear Day</button>
-            <button className="btn" onClick={handleSave}>Save</button>
+          </div>
+          <div className="flex gap-2">
+            <button 
+              className="flex-1 bg-surface-3 text-text-muted font-mono text-xs font-semibold uppercase tracking-wider py-2.5 px-3 rounded-md hover:text-white hover:bg-surface-2 border border-border-strong transition-colors flex items-center justify-center gap-1.5"
+              onClick={handleClear}
+            >
+              <Trash2 className="w-3.5 h-3.5" /> Clear
+            </button>
+            <button 
+              className="flex-1 bg-accent text-[#241300] font-mono text-xs font-bold uppercase tracking-wider py-2.5 px-3 rounded-md hover:bg-[#ffb649] transition-colors flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(235,164,58,0.3)]"
+              onClick={handleSave}
+            >
+              <Save className="w-3.5 h-3.5" /> Save
+            </button>
           </div>
         </div>
       </section>
 
-      <div className="util-summary" id="utilSummary">
-        <div className="card util-stat-card">
-          <div className="util-stat-label">Total studied</div>
-          <div className="util-stat-value">{studiedTotal.toFixed(1)}h</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="glass-card p-5">
+          <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Total studied</div>
+          <div className="font-head text-3xl font-bold text-green">{studiedTotal.toFixed(1)}h</div>
         </div>
-        <div className="card util-stat-card">
-          <div className="util-stat-label">Total wasted</div>
-          <div className="util-stat-value">{wastedTotal.toFixed(1)}h</div>
+        <div className="glass-card p-5">
+          <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Total wasted</div>
+          <div className="font-head text-3xl font-bold text-red">{wastedTotal.toFixed(1)}h</div>
         </div>
-        <div className="card util-stat-card">
-          <div className="util-stat-label">Days logged</div>
-          <div className="util-stat-value">{entries.length}</div>
+        <div className="glass-card p-5">
+          <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Days logged</div>
+          <div className="font-head text-3xl font-bold text-white">{entries.length}</div>
         </div>
-        <div className="card util-stat-card">
-          <div className="util-stat-label">Best day</div>
-          <div className="util-stat-value util-stat-value--sm">
-            {bestDay ? `${bestDay.iso} (${bestDay.net >= 0 ? '+' : ''}${bestDay.net.toFixed(1)}h)` : '—'}
+        <div className="glass-card p-5">
+          <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Best day</div>
+          <div className="font-mono text-sm sm:text-base font-semibold text-accent mt-1">
+            {bestDay ? `${bestDay.iso}\n(${bestDay.net >= 0 ? '+' : ''}${bestDay.net.toFixed(1)}h)` : '—'}
           </div>
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }
 
-// ─── Study Log Sub-View ──────────────────────────────────────────────────────
 function StudyLog() {
   const { state, dispatch } = useApp();
   const [date, setDate] = useState(istTodayIso());
@@ -145,7 +164,6 @@ function StudyLog() {
 
   const sorted = [...state.logs].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // Aggregate total hours by subject for quick summary
   const subjectTotals = {};
   state.logs.forEach(l => {
     subjectTotals[l.subject] = (subjectTotals[l.subject] || 0) + l.hours;
@@ -153,144 +171,193 @@ function StudyLog() {
   const totalHours = state.logs.reduce((s, l) => s + l.hours, 0);
 
   return (
-    <>
-      <p className="section-note">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+    >
+      <p className="text-sm text-text-muted mb-6 leading-relaxed max-w-3xl">
         Log daily hours by subject to track where your time is actually going.
       </p>
 
-      <div className="studylog-form-card">
-        <h3 className="form-title">
-          <span className="form-title-icon">➕</span>
+      <div className="glass-card p-5 sm:p-6 mb-8">
+        <h3 className="font-head font-bold text-lg text-white mb-4 flex items-center gap-2">
+          <Plus className="w-5 h-5 text-accent" />
           Add Entry
         </h3>
-        <div className="log-form">
-          <label>
-            Date
-            <input type="date" id="lDate" value={date} onChange={e => setDate(e.target.value)} />
-          </label>
-          <label>
-            Hours
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Date</label>
+            <input 
+              type="date" 
+              className="w-full bg-surface-3 border border-border-strong rounded-md px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+              value={date} 
+              onChange={e => setDate(e.target.value)} 
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Hours</label>
             <input
               type="number"
               step="0.5"
-              id="lHours"
               placeholder="2.5"
+              className="w-full bg-surface-3 border border-border-strong rounded-md px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
               value={hours}
               onChange={e => setHours(e.target.value)}
             />
-          </label>
-          <label>
-            Subject
-            <select id="lSubject" value={subject} onChange={e => setSubject(e.target.value)}>
+          </div>
+          <div className="flex flex-col gap-1.5 md:col-span-2 lg:col-span-1">
+            <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Subject</label>
+            <select 
+              className="w-full bg-surface-3 border border-border-strong rounded-md px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+              value={subject} 
+              onChange={e => setSubject(e.target.value)}
+            >
               {SYLLABUS.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
-          </label>
-          <label>
-            Note
-            <textarea
-              id="lNote"
+          </div>
+          <div className="flex flex-col gap-1.5 md:col-span-4 lg:col-span-1 lg:col-start-1 lg:col-end-5">
+            <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Note (Optional)</label>
+            <input
+              type="text"
               placeholder="what you covered…"
+              className="w-full bg-surface-3 border border-border-strong rounded-md px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
               value={note}
               onChange={e => setNote(e.target.value)}
             />
-          </label>
-          <div className="form-actions">
-            <button className="btn" id="addLogBtn" onClick={handleAdd}>Add entry</button>
+          </div>
+          <div className="md:col-span-4 lg:col-span-1">
+            <button 
+              className="w-full bg-accent text-[#241300] font-mono text-xs font-bold uppercase tracking-wider py-3 px-4 rounded-md hover:bg-[#ffb649] transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(235,164,58,0.3)] hover:shadow-[0_0_20px_rgba(235,164,58,0.5)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface-2 focus:ring-accent hover:scale-[1.02]"
+              onClick={handleAdd}
+            >
+              <Plus className="w-4 h-4" strokeWidth={3} /> Add
+            </button>
           </div>
         </div>
       </div>
 
       {totalHours > 0 && (
-        <div className="studylog-totals">
-          <div className="studylog-totals-header">
-            <span className="studylog-totals-title">Subject breakdown</span>
-            <span className="studylog-totals-overall">{totalHours.toFixed(1)}h total</span>
+        <div className="glass-card p-5 sm:p-6 mb-8">
+          <div className="flex items-center justify-between mb-5">
+            <span className="font-head font-bold text-lg text-white">Subject breakdown</span>
+            <span className="font-mono text-sm font-semibold text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/20">{totalHours.toFixed(1)}h total</span>
           </div>
-          <div className="studylog-totals-grid">
-            {SYLLABUS.filter(s => subjectTotals[s.id] > 0).map(s => {
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {SYLLABUS.filter(s => subjectTotals[s.id] > 0).map((s, idx) => {
               const pct = Math.round((subjectTotals[s.id] / totalHours) * 100);
               return (
-                <div key={s.id} className="studylog-subj-bar">
-                  <div className="studylog-subj-meta">
-                    <span className="studylog-subj-name">{s.name}</span>
-                    <span className="studylog-subj-hrs">{subjectTotals[s.id].toFixed(1)}h · {pct}%</span>
+                <motion.div 
+                  key={s.id} 
+                  className="bg-surface-2 p-3 rounded-lg border border-border-subtle"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                >
+                  <div className="flex justify-between items-end mb-2">
+                    <span className="text-sm font-semibold text-white truncate pr-2">{s.name}</span>
+                    <span className="font-mono text-[11px] text-text-muted shrink-0">{subjectTotals[s.id].toFixed(1)}h · <span className="text-accent">{pct}%</span></span>
                   </div>
-                  <div className="studylog-bar-outer">
-                    <div className="studylog-bar-inner" style={{ width: `${pct}%` }} />
+                  <div className="w-full h-1.5 bg-surface-3 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-accent rounded-full" 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${pct}%` }}
+                      transition={{ duration: 1, delay: 0.2 }}
+                    />
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         </div>
       )}
 
-      <div className="log-list" id="logList">
+      <div className="flex flex-col gap-3">
+        <h3 className="font-head font-bold text-lg text-white mb-2">Study History</h3>
         {sorted.length === 0 ? (
-          <p className="section-note" style={{ textAlign: 'center', padding: '24px 0' }}>
-            No entries yet — add your first study session above.
-          </p>
-        ) : sorted.map(l => {
+          <div className="glass-card p-10 text-center flex flex-col items-center gap-3">
+            <BookOpen className="w-8 h-8 text-text-muted/50" />
+            <p className="text-sm text-text-muted">No entries yet — add your first study session above.</p>
+          </div>
+        ) : sorted.map((l, idx) => {
           const subj = SYLLABUS.find(s => s.id === l.subject);
           return (
-            <div key={l.id} className="log-entry">
-              <div className="log-entry-left">
-                <div className="log-entry-date">{l.date}</div>
-                <div className="log-entry-hrs">{l.hours}h</div>
+            <motion.div 
+              key={l.id} 
+              className="glass-card p-4 flex flex-col sm:flex-row sm:items-center gap-4 group"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+            >
+              <div className="flex items-center gap-4 min-w-[140px] shrink-0">
+                <div className="font-mono text-xs text-text-muted bg-surface-2 px-2 py-1 rounded border border-border-subtle">{l.date}</div>
+                <div className="font-mono font-bold text-accent bg-accent/10 px-2 py-1 rounded border border-accent/20">{l.hours}h</div>
               </div>
-              <div className="log-entry-body">
-                <div className="log-entry-subj">{subj ? subj.name : ''}</div>
-                <div className="log-entry-note">
-                  {l.note || <span style={{ color: 'var(--text-dim2)', fontStyle: 'italic' }}>no note</span>}
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-white text-sm mb-1">{subj ? subj.name : ''}</div>
+                <div className="text-sm text-text-muted truncate">
+                  {l.note || <span className="italic opacity-50">no note</span>}
                 </div>
               </div>
-              <span
-                className="del-x"
-                data-id={l.id}
+              <button
+                className="p-2 rounded-md text-text-muted hover:text-red hover:bg-red/10 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none shrink-0 self-end sm:self-center"
                 title="Delete entry"
                 onClick={() => {
                   if (window.confirm('Delete this study log entry?')) {
                     dispatch({ type: 'DELETE_LOG', payload: { id: l.id } });
                   }
                 }}
-              >✕</span>
-            </div>
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </motion.div>
           );
         })}
       </div>
-    </>
+    </motion.div>
   );
 }
 
-// ─── Main View ───────────────────────────────────────────────────────────────
 const INNER_TABS = [
-  { id: 'overview', label: 'Day Overview', icon: '📊' },
-  { id: 'studylog', label: 'Study Log',    icon: '📖' },
+  { id: 'overview', label: 'Day Overview', icon: BarChart2 },
+  { id: 'studylog', label: 'Study Log',    icon: BookOpen },
 ];
 
 export default function UtilizationView() {
   const [innerTab, setInnerTab] = useState('overview');
 
   return (
-    <div className="sheet">
-      <h2 className="section-title">Day Log</h2>
+    <div className="glass-panel p-6 sm:p-8">
+      <h2 className="font-head font-bold text-2xl text-white mb-6">Day Log</h2>
 
-      <div className="inner-tabs">
-        {INNER_TABS.map(t => (
-          <button
-            key={t.id}
-            className={`inner-tab-btn${innerTab === t.id ? ' active' : ''}`}
-            onClick={() => setInnerTab(t.id)}
-          >
-            <span className="inner-tab-icon">{t.icon}</span>
-            {t.label}
-          </button>
-        ))}
+      <div className="flex gap-2 mb-8 bg-surface-2 p-1 rounded-lg w-full max-w-sm border border-border-strong">
+        {INNER_TABS.map(t => {
+          const Icon = t.icon;
+          const isActive = innerTab === t.id;
+          return (
+            <button
+              key={t.id}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 py-2 rounded-md font-mono text-xs font-semibold tracking-wider transition-all duration-200 uppercase",
+                isActive 
+                  ? "bg-surface-3 text-cyan shadow-sm border border-border-subtle" 
+                  : "text-text-muted hover:text-white hover:bg-surface-3/50 border border-transparent"
+              )}
+              onClick={() => setInnerTab(t.id)}
+            >
+              <Icon className="w-4 h-4" />
+              {t.label}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="inner-tab-content">
-        {innerTab === 'overview' && <DayOverview />}
-        {innerTab === 'studylog' && <StudyLog />}
+      <div className="min-h-[400px]">
+        <AnimatePresence mode="wait">
+          {innerTab === 'overview' ? <DayOverview key="overview" /> : <StudyLog key="studylog" />}
+        </AnimatePresence>
       </div>
     </div>
   );
