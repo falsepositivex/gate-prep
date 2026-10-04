@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import { lectureStats } from '../../utils/stats.js';
 
-export default function LectureTracker({ subjId }) {
+export default function LectureTracker({ subjId, cardMode = false }) {
   const { state, dispatch } = useApp();
   const [expanded, setExpanded] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -60,8 +60,43 @@ export default function LectureTracker({ subjId }) {
     }
   }
 
-  // --- No lectures set: show setup prompt ---
+  // Build lecture rows using 0-based internal indexing
+  function buildLectureRows() {
+    const rows = [];
+    const totalCount = stats.total;
+    for (let i = 0; i < totalCount; i++) {
+      const ts = data.completed[i];
+      const displayNum = currentStartFrom === 0 ? i : i + 1;
+      rows.push(
+        <div
+          key={i}
+          className={`lecture-row${ts ? ' done' : ''}`}
+          onClick={() => handleToggle(i)}
+        >
+          <span className="lecture-check">{ts ? '☑' : '☐'}</span>
+          <span className="lecture-label">Lecture {displayNum}</span>
+          {ts && <span className="lecture-ts">{ts}</span>}
+        </div>
+      );
+    }
+    return rows;
+  }
+
+  // ── No lectures set: setup prompt ──────────────────────────────────────────
   if (!hasLectures && !editing) {
+    if (cardMode) {
+      return (
+        <div className="lec-card-setup">
+          <span className="lec-card-setup-text">No lectures set yet</span>
+          <button
+            className="btn ghost lec-card-setup-btn"
+            onClick={() => setEditing(true)}
+          >
+            + Set Count
+          </button>
+        </div>
+      );
+    }
     return (
       <div className="lecture-tracker lecture-setup">
         <span className="lecture-setup-icon">🎥</span>
@@ -76,14 +111,12 @@ export default function LectureTracker({ subjId }) {
     );
   }
 
-  // --- Editing lecture count ---
+  // ── Editing lecture count ──────────────────────────────────────────────────
   if (editing) {
-    return (
-      <div className="lecture-tracker lecture-edit">
-        <span className="lecture-setup-icon">🎥</span>
-        <label className="lecture-edit-label">
-          Total lectures in the course:
-        </label>
+    const editContent = (
+      <div className={cardMode ? 'lec-card-edit' : 'lecture-tracker lecture-edit'}>
+        {!cardMode && <span className="lecture-setup-icon">🎥</span>}
+        <label className="lecture-edit-label">Total lectures in the course:</label>
         <input
           type="number"
           className="lecture-edit-input"
@@ -95,70 +128,113 @@ export default function LectureTracker({ subjId }) {
           onKeyDown={handleKeyDown}
           autoFocus
         />
-        
-        <div className="lecture-edit-radio-group" style={{ margin: '8px 0', fontSize: '0.85rem' }}>
-          <span style={{ marginRight: '8px' }}>Start numbering from:</span>
-          <label style={{ marginRight: '12px', cursor: 'pointer' }}>
-            <input 
-              type="radio" 
-              name={`startFrom-${subjId}`} 
-              checked={startFromVal === 0} 
-              onChange={() => setStartFromVal(0)} 
-              style={{ marginRight: '4px' }}
+        <div className="lecture-edit-radio-group">
+          <span className="lecture-edit-radio-label">Start from:</span>
+          <label className="lecture-edit-radio-opt">
+            <input
+              type="radio"
+              name={`startFrom-${subjId}`}
+              checked={startFromVal === 0}
+              onChange={() => setStartFromVal(0)}
             />
             0
           </label>
-          <label style={{ cursor: 'pointer' }}>
-            <input 
-              type="radio" 
-              name={`startFrom-${subjId}`} 
-              checked={startFromVal === 1} 
-              onChange={() => setStartFromVal(1)} 
-              style={{ marginRight: '4px' }}
+          <label className="lecture-edit-radio-opt">
+            <input
+              type="radio"
+              name={`startFrom-${subjId}`}
+              checked={startFromVal === 1}
+              onChange={() => setStartFromVal(1)}
             />
             1
           </label>
         </div>
+        <div className="lecture-edit-actions">
+          <button className="btn lecture-save-btn" onClick={handleSetCount}>Save</button>
+          <button
+            className="btn ghost lecture-cancel-btn"
+            onClick={() => { setEditing(false); setInputVal(''); }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
+    return editContent;
+  }
 
-        <button className="btn lecture-save-btn" onClick={handleSetCount}>
-          Save
-        </button>
-        <button
-          className="btn ghost lecture-cancel-btn"
-          onClick={() => { setEditing(false); setInputVal(''); }}
-        >
-          Cancel
-        </button>
+  // ── Lectures set: summary + optional checklist ─────────────────────────────
+  const { completed: completedCount, total: totalCount, pct } = stats;
+
+  if (cardMode) {
+    // Card-mode: compact summary + inline checklist toggle
+    return (
+      <div className="lec-card-main">
+        <div className="lec-card-summary" onClick={() => setExpanded(!expanded)}>
+          <div className="lec-card-counts">
+            <span className="lec-card-done">{completedCount}</span>
+            <span className="lec-card-sep">/</span>
+            <span className="lec-card-total">{totalCount}</span>
+            <span className="lec-card-pct">{pct}%</span>
+          </div>
+          <div className="lec-card-bar-outer">
+            <div className="lec-card-bar-fill" style={{ width: `${pct}%` }} />
+          </div>
+          <div className="lec-card-actions">
+            {completedCount < totalCount && (
+              <button
+                className="lecture-mark-all-btn"
+                title="Mark all as done"
+                onClick={e => { e.stopPropagation(); handleCompleteAll(); }}
+              >
+                ✓ All
+              </button>
+            )}
+            {completedCount > 0 && (
+              <button
+                className="lecture-reset-all-btn"
+                title="Uncheck all"
+                onClick={e => { e.stopPropagation(); handleResetAll(); }}
+              >
+                ✗
+              </button>
+            )}
+            <button
+              className="lecture-action-btn"
+              title={`${currentStartFrom}-based numbering`}
+              onClick={e => { e.stopPropagation(); handleToggleStartFrom(); }}
+            >
+              #{currentStartFrom}
+            </button>
+            <button
+              className="lecture-action-btn"
+              title="Edit count"
+              onClick={e => { e.stopPropagation(); startEdit(); }}
+            >
+              ✏️
+            </button>
+            <button
+              className="lecture-action-btn"
+              title="Clear data"
+              onClick={e => { e.stopPropagation(); handleClear(); }}
+            >
+              🗑️
+            </button>
+            <span className="lecture-expand-arrow">{expanded ? '▴' : '▾'}</span>
+          </div>
+        </div>
+        {expanded && (
+          <div className="lecture-checklist">
+            {buildLectureRows()}
+          </div>
+        )}
       </div>
     );
   }
 
-  // --- Lectures set: summary + optional expanded checklist ---
-  const completedCount = stats.completed;
-  const totalCount = stats.total;
-  const pct = stats.pct;
-
-  // Build lecture rows using 0-based internal indexing
-  const lectureRows = [];
-  for (let i = 0; i < totalCount; i++) {
-    const ts = data.completed[i]; // timestamp or undefined
-    const displayNum = currentStartFrom === 0 ? i : i + 1;
-    lectureRows.push(
-      <div
-        key={i}
-        className={`lecture-row${ts ? ' done' : ''}`}
-        onClick={() => handleToggle(i)}
-      >
-        <span className="lecture-check">{ts ? '☑' : '☐'}</span>
-        <span className="lecture-label">Lecture {displayNum}</span>
-        {ts && <span className="lecture-ts">{ts}</span>}
-      </div>
-    );
-  }
-
+  // Default (accordion-embedded) mode
   return (
     <div className="lecture-tracker lecture-main">
-      {/* Summary bar — always visible */}
       <div className="lecture-summary" onClick={() => setExpanded(!expanded)}>
         <span className="lecture-setup-icon">🎥</span>
         <div className="lecture-summary-info">
@@ -222,10 +298,9 @@ export default function LectureTracker({ subjId }) {
         </div>
       </div>
 
-      {/* Expanded checklist */}
       {expanded && (
         <div className="lecture-checklist">
-          {lectureRows}
+          {buildLectureRows()}
         </div>
       )}
     </div>

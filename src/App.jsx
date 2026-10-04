@@ -4,7 +4,6 @@ import TabNav from './components/TabNav/TabNav.jsx';
 import DashboardView from './views/DashboardView/DashboardView.jsx';
 import SyllabusView from './views/SyllabusView/SyllabusView.jsx';
 import MockTestsView from './views/MockTestsView/MockTestsView.jsx';
-import StudyLogView from './views/StudyLogView/StudyLogView.jsx';
 import UtilizationView from './views/UtilizationView/UtilizationView.jsx';
 import MistakesView from './views/MistakesView/MistakesView.jsx';
 
@@ -19,7 +18,6 @@ export default function App() {
       {activeTab === 'dash'     && <DashboardView />}
       {activeTab === 'syllabus' && <SyllabusView />}
       {activeTab === 'tests'    && <MockTestsView />}
-      {activeTab === 'log'      && <StudyLogView />}
       {activeTab === 'util'     && <UtilizationView />}
       {activeTab === 'mistakes' && <MistakesView />}
 
