@@ -48,18 +48,18 @@ export default function MistakesView() {
   if (subjFilter) items = items.filter(m => m.subject === subjFilter);
 
   return (
-    <div className="glass-panel p-6 sm:p-8">
+    <div className="glass-panel p-3 sm:p-6 lg:p-8">
       <h2 className="font-head font-bold text-2xl text-white mb-2">Mistake Log</h2>
       <p className="text-sm text-text-muted mb-8 leading-relaxed max-w-3xl">
         Log every silly slip, concept gap, or repeated mock-test error here — from mocks, DPPs, PYQs, or lectures. Review this list before each test so you stop repeating the same ones.
       </p>
 
-      <div className="glass-card p-5 sm:p-6 mb-8 border-red/20 bg-red/5">
+      <div className="glass-card p-3 sm:p-5 mb-4 sm:mb-8 border-red/20 bg-red/5">
         <h3 className="font-head font-bold text-lg text-white mb-4 flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-red" />
           Log a mistake
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-3 sm:mb-4">
           <div className="flex flex-col gap-1.5">
             <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Date</label>
             <input 
@@ -117,7 +117,7 @@ export default function MistakesView() {
         </button>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between items-start sm:items-center mb-4 sm:mb-6">
         <ChipFilter options={FILTER_OPTIONS} active={filterMode} onChange={setFilterMode} />
         <select
           className="w-full sm:w-auto bg-surface-2 border border-border-strong rounded-full px-4 py-1.5 text-sm font-mono text-text-main focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
@@ -147,7 +147,7 @@ export default function MistakesView() {
               <motion.div 
                 key={m.id} 
                 className={cn(
-                  "glass-card p-5 relative overflow-hidden transition-all duration-300",
+                  "glass-card p-3 sm:p-5 relative overflow-hidden transition-all duration-300",
                   m.resolved ? "opacity-60 hover:opacity-100 bg-surface-2/30" : "border-red/20 shadow-[0_4px_20px_-10px_rgba(248,113,113,0.1)] hover:border-red/40"
                 )}
                 initial={{ opacity: 0, y: 10 }}

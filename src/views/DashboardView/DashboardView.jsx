@@ -40,7 +40,7 @@ export default function DashboardView() {
     <>
       <AlertPanel />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-8">
         <StatCard
           label="Overall syllabus"
           value={pct + '%'}
@@ -119,7 +119,7 @@ export default function DashboardView() {
       </div>
 
       <motion.div 
-        className="glass-panel p-6 sm:p-8"
+        className="glass-panel p-4 sm:p-6 lg:p-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.3 }}
@@ -137,7 +137,7 @@ export default function DashboardView() {
             return (
               <motion.div 
                 key={subj.id} 
-                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 border-b border-border-subtle last:border-0 hover:bg-surface-2/50 -mx-4 px-4 sm:mx-0 sm:px-4 rounded-lg transition-colors group"
+                className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 py-3 sm:py-4 border-b border-border-subtle last:border-0 hover:bg-surface-2/50 -mx-3 px-3 sm:-mx-4 sm:px-4 rounded-lg transition-colors group"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: 0.4 + index * 0.05 }}

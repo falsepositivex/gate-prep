@@ -31,13 +31,13 @@ export default function MockTestsView() {
   const tableRows = [...sorted].reverse();
 
   return (
-    <div className="glass-panel p-6 sm:p-8">
+    <div className="glass-panel p-3 sm:p-6 lg:p-8">
       <h2 className="font-head font-bold text-2xl text-white mb-2">Mock Test Tracker</h2>
       <p className="text-sm text-text-muted mb-8 max-w-3xl leading-relaxed">
         Log every weekly quiz, test series paper, or full mock. Score is out of 100 unless you change the max.
       </p>
 
-      <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8 bg-surface-2 p-5 rounded-xl border border-border-strong items-end">
+      <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4 mb-4 sm:mb-8 bg-surface-2 p-3 sm:p-5 rounded-xl border border-border-strong items-end">
         <div className="flex flex-col gap-1.5 lg:col-span-1">
           <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Date</label>
           <input 
@@ -104,12 +104,12 @@ export default function MockTestsView() {
         <table className="w-full text-left border-collapse min-w-[650px]">
           <thead>
             <tr className="bg-surface-2 border-b border-border-strong">
-              <th className="font-mono text-[11px] text-text-muted font-medium p-4 uppercase tracking-wider w-[120px]">Date</th>
-              <th className="font-mono text-[11px] text-text-muted font-medium p-4 uppercase tracking-wider">Test Name</th>
-              <th className="font-mono text-[11px] text-text-muted font-medium p-4 uppercase tracking-wider">Type</th>
-              <th className="font-mono text-[11px] text-text-muted font-medium p-4 uppercase tracking-wider">Score</th>
-              <th className="font-mono text-[11px] text-text-muted font-medium p-4 uppercase tracking-wider">%</th>
-              <th className="font-mono text-[11px] text-text-muted font-medium p-4 uppercase tracking-wider text-right w-[80px]">Action</th>
+              <th className="font-mono text-[11px] text-text-muted font-medium p-2.5 sm:p-4 uppercase tracking-wider w-[100px] sm:w-[120px]">Date</th>
+              <th className="font-mono text-[11px] text-text-muted font-medium p-2.5 sm:p-4 uppercase tracking-wider">Test Name</th>
+              <th className="font-mono text-[11px] text-text-muted font-medium p-2.5 sm:p-4 uppercase tracking-wider hidden sm:table-cell">Type</th>
+              <th className="font-mono text-[11px] text-text-muted font-medium p-2.5 sm:p-4 uppercase tracking-wider">Score</th>
+              <th className="font-mono text-[11px] text-text-muted font-medium p-2.5 sm:p-4 uppercase tracking-wider">%</th>
+              <th className="font-mono text-[11px] text-text-muted font-medium p-2.5 sm:p-4 uppercase tracking-wider text-right w-[60px] sm:w-[80px]">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -127,16 +127,16 @@ export default function MockTestsView() {
                     transition={{ duration: 0.2, delay: idx * 0.03 }}
                     className="border-b border-border-subtle last:border-0 hover:bg-surface-2/50 transition-colors group"
                   >
-                    <td className="p-4 text-sm text-text-muted font-mono">{t.date}</td>
-                    <td className="p-4 text-sm text-white font-medium">{t.name}</td>
-                    <td className="p-4 text-sm text-text-muted">
+                    <td className="p-2.5 sm:p-4 text-sm text-text-muted font-mono">{t.date}</td>
+                    <td className="p-2.5 sm:p-4 text-sm text-white font-medium">{t.name}</td>
+                    <td className="p-2.5 sm:p-4 text-sm text-text-muted hidden sm:table-cell">
                       <span className="bg-surface-3 px-2 py-1 rounded text-xs border border-border-strong">{t.testType}</span>
                     </td>
-                    <td className="p-4 text-sm text-text-main font-mono">
+                    <td className="p-2.5 sm:p-4 text-sm text-text-main font-mono">
                       {t.score}<span className="text-text-muted/50 text-xs">/{t.max}</span>
                     </td>
-                    <td className={`p-4 text-sm font-bold font-mono ${scoreColor}`}>{pct}%</td>
-                    <td className="p-4 text-right">
+                    <td className={`p-2.5 sm:p-4 text-sm font-bold font-mono ${scoreColor}`}>{pct}%</td>
+                    <td className="p-2.5 sm:p-4 text-right">
                       <button
                         className="p-2 rounded-md text-text-muted hover:text-red hover:bg-red/10 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none"
                         onClick={() => {

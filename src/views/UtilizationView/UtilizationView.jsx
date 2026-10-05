@@ -61,18 +61,18 @@ function DayOverview() {
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
     >
-      <p className="text-sm text-text-muted mb-6 leading-relaxed max-w-3xl">
+      <p className="text-sm text-text-muted mb-4 sm:mb-6 leading-relaxed max-w-3xl">
         Log hours studied vs. hours wasted per day. Greener = more productive net hours, redder = more time lost.
       </p>
 
       <HeatmapGrid util={state.util} onCellClick={setActiveDate} activeDate={activeDate} />
 
-      <section className="glass-card p-5 sm:p-6 mb-8 border-accent/20 bg-accent/5">
+      <section className="glass-card p-3 sm:p-5 mb-5 sm:mb-8 border-accent/20 bg-accent/5">
         <h3 className="font-head font-bold text-lg text-white mb-4 flex items-center gap-2">
           <CalendarIcon className="w-5 h-5 text-accent" />
           Log for <span className="text-accent">{activeDate}</span>
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 items-end">
           <div className="flex flex-col gap-1.5">
             <label className="font-mono text-[11px] uppercase tracking-wider text-text-muted">Date</label>
             <input
@@ -124,19 +124,19 @@ function DayOverview() {
       </section>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass-card p-5">
+        <div className="glass-card p-3 sm:p-5">
           <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Total studied</div>
           <div className="font-head text-3xl font-bold text-green">{studiedTotal.toFixed(1)}h</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="glass-card p-3 sm:p-5">
           <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Total wasted</div>
           <div className="font-head text-3xl font-bold text-red">{wastedTotal.toFixed(1)}h</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="glass-card p-3 sm:p-5">
           <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Days logged</div>
           <div className="font-head text-3xl font-bold text-white">{entries.length}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="glass-card p-3 sm:p-5">
           <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted mb-2">Best day</div>
           <div className="font-mono text-sm sm:text-base font-semibold text-accent mt-1">
             {bestDay ? `${bestDay.iso}\n(${bestDay.net >= 0 ? '+' : ''}${bestDay.net.toFixed(1)}h)` : '—'}
@@ -181,7 +181,7 @@ function StudyLog() {
         Log daily hours by subject to track where your time is actually going.
       </p>
 
-      <div className="glass-card p-5 sm:p-6 mb-8">
+      <div className="glass-card p-3 sm:p-5 mb-4 sm:mb-8">
         <h3 className="font-head font-bold text-lg text-white mb-4 flex items-center gap-2">
           <Plus className="w-5 h-5 text-accent" />
           Add Entry
@@ -286,7 +286,7 @@ function StudyLog() {
           return (
             <motion.div 
               key={l.id} 
-              className="glass-card p-4 flex flex-col sm:flex-row sm:items-center gap-4 group"
+              className="glass-card p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 group"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
@@ -329,7 +329,7 @@ export default function UtilizationView() {
   const [innerTab, setInnerTab] = useState('overview');
 
   return (
-    <div className="glass-panel p-6 sm:p-8">
+    <div className="glass-panel p-3 sm:p-6 lg:p-8">
       <h2 className="font-head font-bold text-2xl text-white mb-6">Day Log</h2>
 
       <div className="flex gap-2 mb-8 bg-surface-2 p-1 rounded-lg w-full max-w-sm border border-border-strong">

@@ -25,7 +25,7 @@ export default function SubjectAccordion({ subj, open, topics }) {
 
   return (
     <details className="group glass-card mb-3 overflow-hidden transition-all duration-300" open={open}>
-      <summary className="flex items-center gap-3 p-4 cursor-pointer bg-surface-2 hover:bg-surface-3 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none focus-visible:bg-surface-3 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/50">
+      <summary className="flex items-center gap-3 p-3 sm:p-4 cursor-pointer bg-surface-2 hover:bg-surface-3 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none focus-visible:bg-surface-3 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/50">
         <ChevronDown className="w-5 h-5 text-text-muted transition-transform duration-300 group-open:rotate-180 shrink-0" />
         
         <div className="flex-1 min-w-0">
@@ -63,7 +63,7 @@ export default function SubjectAccordion({ subj, open, topics }) {
         </div>
       </summary>
 
-      <div className="p-4 pt-0 border-t border-border-subtle bg-surface-1/50">
+      <div className="p-3 sm:p-4 pt-0 border-t border-border-subtle bg-surface-1/50">
         {/* Rev Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 py-4 border-b border-border-subtle">
           <div className="text-sm flex items-center gap-2.5 text-text-main">

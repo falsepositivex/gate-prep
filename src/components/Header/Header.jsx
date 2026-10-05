@@ -44,7 +44,7 @@ export default function Header() {
   }
 
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border-subtle relative z-10">
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 sm:pb-6 border-b border-border-subtle relative z-10">
       <div className="flex flex-col gap-1">
         <div className="font-mono text-xs tracking-[0.15em] text-cyan uppercase font-semibold">GATE CS Complete Prep</div>
         <h1 className="font-head font-bold text-3xl md:text-4xl leading-tight text-white tracking-tight">

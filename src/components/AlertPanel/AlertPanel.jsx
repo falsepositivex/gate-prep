@@ -40,7 +40,7 @@ export default function AlertPanel() {
   const daysDisplay = diff > 0 ? diff : 0;
 
   return (
-    <div className={`flex flex-col lg:flex-row gap-8 items-start bg-surface-1 border-2 rounded-2xl p-6 sm:p-8 mb-6 transition-all duration-500 relative overflow-hidden ${lvlStyles[lvl]}`}>
+    <div className={`flex flex-col lg:flex-row gap-5 sm:gap-8 items-start bg-surface-1 border-2 rounded-2xl p-4 sm:p-6 sm:p-8 mb-5 sm:mb-6 transition-all duration-500 relative overflow-hidden ${lvlStyles[lvl]}`}>
       {/* Background glow behind the text */}
       <div className={`absolute top-0 left-0 w-64 h-64 blur-[80px] rounded-full opacity-10 pointer-events-none ${lvl === 'safe' ? 'bg-green' : lvl === 'watch' ? 'bg-accent' : 'bg-red'}`} />
       
@@ -51,7 +51,7 @@ export default function AlertPanel() {
         
         <div className="flex items-center gap-3 mb-3">
           <motion.div 
-            className={`font-head font-bold text-7xl md:text-[6rem] leading-none tracking-tighter ${textStyles[lvl]}`}
+            className={`font-head font-bold text-6xl sm:text-7xl md:text-[6rem] leading-none tracking-tighter ${textStyles[lvl]}`}
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", bounce: 0.5, duration: 0.8 }}

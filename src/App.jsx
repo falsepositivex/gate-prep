@@ -18,7 +18,7 @@ export default function App() {
         <div className="w-[800px] h-[300px] bg-accent/10 blur-[100px] rounded-full -top-[150px] absolute" />
       </div>
 
-      <div className="max-w-[1180px] mx-auto px-4 sm:px-6 py-6 pb-32 md:pb-36 relative z-10">
+      <div className="max-w-[1180px] mx-auto px-3 sm:px-6 py-4 sm:py-6 pb-32 md:pb-36 relative z-10">
         <Header />
         
         <main className="relative mt-6 md:mt-8">
@@ -47,7 +47,7 @@ export default function App() {
       </div>
       
       {/* Fixed Bottom Tab Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 md:p-6 pointer-events-none z-50 flex justify-center pb-safe-bottom">
+      <div className="fixed bottom-0 left-0 right-0 p-3 md:p-6 pointer-events-none z-50 flex justify-center pb-safe-bottom">
         <div className="pointer-events-auto w-full max-w-md">
           <TabNav active={activeTab} onChange={setActiveTab} />
         </div>

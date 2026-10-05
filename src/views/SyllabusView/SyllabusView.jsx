@@ -41,7 +41,7 @@ function SyllabusTracker() {
         Based on the official GATE 2027 CS/IT syllabus (IIT Madras). Click a stage tag to toggle it for that topic.
       </p>
 
-      <div className="flex flex-col lg:flex-row gap-4 mb-6 items-start lg:items-center">
+      <div className="flex flex-col lg:flex-row gap-3 mb-3 sm:mb-6 items-start lg:items-center">
         <div className="relative w-full lg:flex-1 lg:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
@@ -109,7 +109,7 @@ function LecturesOverview() {
       </p>
 
       {lecOverall.total > 0 && (
-        <div className="glass-card p-5 border-cyan/20 bg-cyan/5 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="glass-card p-3 sm:p-5 border-cyan/20 bg-cyan/5 mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-4 w-full sm:w-auto">
             <div className="w-12 h-12 rounded-full bg-cyan/20 flex items-center justify-center text-cyan shrink-0">
               <Video className="w-6 h-6" />
@@ -132,12 +132,12 @@ function LecturesOverview() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
         {SYLLABUS.map(subj => {
           const stats = lectureStats(state.lectures, subj.id);
           return (
             <div key={subj.id} className="glass-card overflow-hidden">
-              <div className="flex items-center justify-between p-4 bg-surface-2 border-b border-border-subtle">
+              <div className="flex items-center justify-between p-2.5 sm:p-4 bg-surface-2 border-b border-border-subtle">
                 <span className="font-semibold text-white truncate pr-4">{subj.name}</span>
                 {stats.total > 0 && (
                   <span className="px-2.5 py-1 rounded-md font-mono text-[11px] font-semibold tracking-wider uppercase bg-cyan/10 text-cyan shrink-0">
@@ -158,7 +158,7 @@ export default function SyllabusView() {
   const [innerTab, setInnerTab] = useState('syllabus');
 
   return (
-    <div className="glass-panel p-6 sm:p-8">
+    <div className="glass-panel p-3 sm:p-6 lg:p-8">
       <h2 className="font-head font-bold text-2xl text-white mb-6">Syllabus Tracker</h2>
 
       <div className="flex gap-2 mb-8 bg-surface-2 p-1 rounded-lg w-full max-w-sm border border-border-strong">
