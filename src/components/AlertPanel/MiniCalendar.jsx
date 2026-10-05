@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const DAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const MONTHS = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December'
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
 function calMin() {
@@ -63,17 +63,17 @@ export default function MiniCalendar() {
     const iso = ymdToIso(viewYear, viewMonth, d);
     const dayEpoch = ymdEpoch(viewYear, viewMonth, d);
     const diffToDeadline = Math.round((deadlineEpoch - dayEpoch) / 86400000);
-    
+
     let bucket = cdBucket(diffToDeadline);
     if (diffToDeadline < 0) bucket = 'cd-critical';
-    
+
     const isPast = iso < todayIso;
     const isToday = iso === todayIso;
     const isDeadline = iso === deadlineIso;
-    
+
     const bgColors = {
       'cd-safe': 'bg-[#234a2c]',
-      'cd-warn': 'bg-[#5a4a1f]',
+      'cd-warn': 'bg-[#1a7431]',
       'cd-danger': 'bg-[#6b2e26]',
       'cd-critical': 'bg-[#943f30]',
     };
@@ -117,16 +117,16 @@ export default function MiniCalendar() {
           aria-label="Next month"
         ><ChevronRight className="w-4 h-4" /></button>
       </div>
-      
+
       <div className="w-full relative min-h-[190px] p-1 -mx-1 overflow-visible">
         <div className="grid grid-cols-7 gap-1 mb-1">
           {DAY_LABELS.map((l, i) => (
             <div key={i} className="font-mono text-[10px] text-text-muted text-center pb-1 font-semibold">{l}</div>
           ))}
         </div>
-        
+
         <AnimatePresence mode="wait" initial={false}>
-          <motion.div 
+          <motion.div
             key={`${viewYear}-${viewMonth}`}
             className="grid grid-cols-7 gap-[3px] sm:gap-1 w-full"
             initial={{ x: direction * 20, opacity: 0 }}
@@ -138,10 +138,10 @@ export default function MiniCalendar() {
           </motion.div>
         </AnimatePresence>
       </div>
-      
+
       <div className="flex items-center justify-center gap-3 sm:gap-4 font-mono text-[10px] sm:text-[11px] text-text-muted mt-2 flex-wrap">
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-[#234a2c]" /> safe</div>
-        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-[#5a4a1f]" /> watch</div>
+        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-[#1a7431]" /> watch</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-[#6b2e26]" /> crunch</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-[#943f30]" /> critical</div>
       </div>
