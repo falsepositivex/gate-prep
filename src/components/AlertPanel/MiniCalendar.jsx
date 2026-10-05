@@ -101,7 +101,7 @@ export default function MiniCalendar() {
   const title = `${MONTHS[viewMonth]} ${viewYear}`;
 
   return (
-    <div className="w-full max-w-[280px]">
+    <div className="w-full">
       <div className="flex items-center justify-between gap-2 mb-3">
         <button
           className="w-7 h-7 rounded-md border border-border-strong bg-surface-3 text-text-main flex items-center justify-center hover:bg-surface-2 hover:border-accent hover:text-accent transition-all disabled:opacity-30 disabled:hover:bg-surface-3 disabled:hover:border-border-strong disabled:hover:text-text-main disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -118,7 +118,7 @@ export default function MiniCalendar() {
         ><ChevronRight className="w-4 h-4" /></button>
       </div>
       
-      <div className="w-full relative overflow-hidden min-h-[190px]">
+      <div className="w-full relative min-h-[190px] p-1 -mx-1 overflow-visible">
         <div className="grid grid-cols-7 gap-1 mb-1">
           {DAY_LABELS.map((l, i) => (
             <div key={i} className="font-mono text-[10px] text-text-muted text-center pb-1 font-semibold">{l}</div>

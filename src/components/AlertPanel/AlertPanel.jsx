@@ -49,7 +49,7 @@ export default function AlertPanel() {
           <Clock className="w-4 h-4" /> Syllabus Deadline · 31 Dec 2026
         </div>
         
-        <div className="flex items-baseline gap-4 mb-3">
+        <div className="flex items-center gap-3 mb-3">
           <motion.div 
             className={`font-head font-bold text-7xl md:text-[6rem] leading-none tracking-tighter ${textStyles[lvl]}`}
             initial={{ scale: 0.9, opacity: 0 }}
@@ -58,7 +58,7 @@ export default function AlertPanel() {
           >
             {daysDisplay}
           </motion.div>
-          <div className="font-mono text-sm tracking-widest text-text-muted uppercase max-w-[120px] leading-tight">
+          <div className="font-mono text-sm tracking-widest text-text-muted uppercase leading-tight">
             Days left to finish syllabus
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function AlertPanel() {
         </div>
       </div>
       
-      <div className="w-full lg:w-auto flex-shrink-0 relative z-10 mx-auto lg:mx-0 min-w-[260px]">
+      <div className="w-full lg:w-auto flex-shrink-0 relative z-10 flex justify-center lg:justify-start min-w-[260px]">
         <MiniCalendar />
       </div>
     </div>

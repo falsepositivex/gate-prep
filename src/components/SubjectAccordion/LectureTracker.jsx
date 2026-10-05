@@ -73,20 +73,22 @@ export default function LectureTracker({ subjId, cardMode = false }) {
         <button
           key={i}
           className={cn(
-            "flex items-center gap-3 w-full p-2.5 rounded-md transition-colors focus:outline-none focus-visible:bg-surface-3 text-left group",
-            ts ? "bg-cyan/5 hover:bg-cyan/10" : "hover:bg-surface-3"
+            "flex items-center gap-2.5 w-full px-2.5 py-2 sm:px-3 sm:py-2.5 rounded-md transition-colors focus:outline-none focus-visible:bg-surface-3 text-left group border-l-2",
+            ts
+              ? "bg-cyan/5 hover:bg-cyan/10 border-l-cyan/50"
+              : "hover:bg-surface-3 border-l-transparent hover:border-l-border-strong"
           )}
           onClick={() => handleToggle(i)}
         >
           {ts ? (
-            <CheckSquare className="w-5 h-5 text-cyan shrink-0 transition-transform group-hover:scale-110" />
+            <CheckSquare className="w-4 h-4 text-cyan shrink-0 transition-transform group-hover:scale-110" />
           ) : (
-            <Square className="w-5 h-5 text-text-muted shrink-0 transition-transform group-hover:scale-110" />
+            <Square className="w-4 h-4 text-text-muted shrink-0 transition-transform group-hover:scale-110" />
           )}
-          <span className={cn("text-[15px] font-medium flex-1", ts ? "text-cyan" : "text-text-main group-hover:text-white")}>
+          <span className={cn("text-sm font-medium flex-1", ts ? "text-cyan" : "text-text-main group-hover:text-white")}>
             Lecture {displayNum}
           </span>
-          {ts && <span className="font-mono text-xs text-text-muted">{ts}</span>}
+          {ts && <span className="font-mono text-[11px] text-text-muted ml-auto pl-2 shrink-0">{ts}</span>}
         </button>
       );
     }
@@ -180,8 +182,8 @@ export default function LectureTracker({ subjId, cardMode = false }) {
     <div className={cn("flex flex-col", cardMode ? "" : "border-b border-border-subtle")}>
       <div 
         className={cn(
-          "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 cursor-pointer hover:bg-surface-2 transition-colors",
-          cardMode ? "p-0 py-2 hover:bg-transparent" : ""
+          "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 px-3 py-2.5 sm:px-4 sm:py-3 cursor-pointer hover:bg-surface-2 transition-colors",
+          cardMode ? "px-3 sm:px-4 hover:bg-surface-2/60" : ""
         )}
         onClick={() => setExpanded(!expanded)}
       >
@@ -255,8 +257,8 @@ export default function LectureTracker({ subjId, cardMode = false }) {
             className="overflow-hidden"
           >
             <div className={cn(
-              "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 px-4 pb-4 pt-1",
-              cardMode ? "px-0" : ""
+              "flex flex-col gap-0.5 px-3 pb-3 pt-0.5 sm:px-4 sm:pb-4",
+              cardMode ? "px-2 sm:px-3" : ""
             )}>
               {buildLectureRows()}
             </div>
